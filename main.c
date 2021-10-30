@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "average_buffer.h"
 
 #include <stdio.h>
@@ -33,23 +35,25 @@ int main()
 {
     int i, randNum;
 
-    AverageBuffer *ab = allocAverageBuffer(8, above_threshold_cb, THRESHOLD);
+    AverageBuffer *ab = allocAverageBuffer(100, above_threshold_cb, THRESHOLD);
 
     srand(time(NULL));
 
     for (i = 0; i < 200; i++)
     {
         randNum = rand() % 100;
-        addSample(ab, randNum);
+		//scanf("%d", &randNum);
+
+		addSample(ab, randNum);
 
         printf("i = %d\n", i);
         printf("randNum = %d\n", randNum);
         printf("getAverage = %lf\n", getAverage(ab));
         printf("getAverageForever = %lf\n", getAverageForever(ab));
-        //printf("getUpperQuarterAverage = %lf\n", getUpperQuarterAverage(ab));
+        printf("getUpperQuarterAverage = %lf\n", getUpperQuarterAverage(ab));
         printf("getLowerQuarterAverage = %lf\n", getLowerQuarterAverage(ab));
 
-		printf("END LOOP\n");
+		printf("END LOOP\n\n");
     }
 
     clearAverageBuffer(ab);

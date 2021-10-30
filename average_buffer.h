@@ -45,10 +45,13 @@ void addSample(AverageBuffer* ab, int number);
 
 bool isFull(AverageBuffer* ab);
 
-void updateAverage(AverageBuffer* ab, int newNumberToAdd, int oldNumberToReduce);
+void updateAverage(AverageBuffer* ab);
+
+double getUpperQuarterAverage(AverageBuffer* ab);
 double getLowerQuarterAverage(AverageBuffer* ab);
 void updateLowerQuarterSum(AverageBuffer* ab, int oldNumberToReduce);
 void updateUpperQuarterSum(AverageBuffer* ab, int newNumberToAdd);
+void updateSum(AverageBuffer* ab, int newNumberToAdd, int oldNumberToReduce);
 void* safeMalloc(size_t size);// ask about
 
 #endif

@@ -50,12 +50,12 @@ void addSample(AverageBuffer* ab, int number)
 	}
 
 	ab->buffer[ab->indexOldestSample] = number;
-
-	ab->indexOldestSample++;
-	ab->indexOldestSample = ab->indexOldestSample % ab->maxSize;
-
+	ab->indexOldestSample = (ab->indexOldestSample + 1) % ab->maxSize;
+	//ab->indexOldestSample++;
+	//ab->indexOldestSample = ab->indexOldestSample % ab->maxSize;
 	updateSum(ab, number, saveOldSample);
 	updateLowerQuarterSum(ab, saveOldSample);
+	updateUpperQuarterSum(ab, number);
 
 	if (!isFull(ab)) // if buffer isnt full yet increase 
 	{
@@ -63,8 +63,6 @@ void addSample(AverageBuffer* ab, int number)
 	}
 
 	updateAverage(ab);
-	//updateUpperQuarterSum(ab, number);
-
 	ab->foreverNumOfSamples++;
 	ab->foreverSum += number;
 
@@ -76,13 +74,12 @@ void addSample(AverageBuffer* ab, int number)
 
 void updateUpperQuarterSum(AverageBuffer* ab, int newNumberToAdd)
 {
-	if (!isFull(ab))
-	{
-		if (round(ab->curNumOfSamples / 4) == ab->curNumOfSamples / 4)
-		{
-			//ab->upperQuarterSum += ab->buffer[ab->indexQuarterUp];
-		}
+	int nextNumOfSamples = ab->curNumOfSamples + 1;
 
+	if (!isFull(ab) && (double)nextNumOfSamples / 4 == nextNumOfSamples / 4)
+	{
+		int indexNewSampleAdd = (ab->indexQuarterUp + nextNumOfSamples / 4) - 1;
+		ab->upperQuarterSum += ab->buffer[indexNewSampleAdd];
 	}
 	else
 	{
@@ -117,11 +114,21 @@ void updateLowerQuarterSum(AverageBuffer* ab, int oldNumberToReduce)
 	else
 	{
 		ab->indexQuarterLow = (ab->indexQuarterLow + 1) % ab->maxSize;
-		int indexNewSampleAdd = ((ab->indexQuarterLow + ab->curNumOfSamples / 4) % ab->maxSize) - 1;
+		int indexNewSampleAdd = ((ab->indexQuarterLow + ab->curNumOfSamples / 4) - 1) % ab->maxSize;
 
 		ab->lowerQuarterSum -= oldNumberToReduce;		
 		ab->lowerQuarterSum += ab->buffer[indexNewSampleAdd];
 	}
+}
+
+double getUpperQuarterAverage(AverageBuffer* ab)
+{
+	if ((ab->curNumOfSamples / 4) != 0)
+	{
+		return ab->upperQuarterSum / (ab->curNumOfSamples / 4);
+	}
+
+	return ab->upperQuarterSum;
 }
 
 double getLowerQuarterAverage(AverageBuffer* ab)
@@ -137,9 +144,13 @@ double getLowerQuarterAverage(AverageBuffer* ab)
 void clearAverageBuffer(AverageBuffer* ab)
 {
 	ab->indexOldestSample = 0;
+	ab->indexQuarterLow = 0;
+	ab->indexQuarterUp = 0;
 	ab->curNumOfSamples = 0;
 	ab->foreverNumOfSamples = 0;
 	ab->sum = 0;
+	ab->lowerQuarterSum = 0;
+	ab->upperQuarterSum = 0;
 	ab->foreverSum = 0;
 	ab->currAverage = 0;
 }
@@ -162,7 +173,6 @@ double getAverageForever(AverageBuffer* ab)
 
 bool isFull(AverageBuffer* ab)
 {
-	//return ab->indexOldestSample < ab->curNumOfSamples;
 	return ab->maxSize == ab->curNumOfSamples;
 }
 
