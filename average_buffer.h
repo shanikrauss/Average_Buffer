@@ -10,24 +10,18 @@ typedef void(*callbackFunc)(int, int);
 
 struct AverageBuffer {
 	int *buffer;
-	int maxSize;
+	int size;
 	int curNumOfSamples;
 	int foreverNumOfSamples;
-	//int quarterNumOfSamples; // need? 
-	int indexQuarterLow;// need?
-	int indexQuarterUp;// need?
-
-	double foreverSum; // double??
-	double sum; // double??
-	double upperQuarterSum;// double??
-	double lowerQuarterSum;// double??
-
-	int indexOldestSample;
-	//int indexNewSample; // not USED
+	int quarterLowIdx;
+	int quarterUpIdx;
+	int oldestSampleIdx;
+	double sum;
+	double foreverSum; 
+	double upperQuarterSum;
+	double lowerQuarterSum;
 	int threshold;
-	double currAverage; // double??
-
-	callbackFunc above_threshold_cb;
+	callbackFunc aboveThresholdCB;
 };
 typedef struct AverageBuffer AverageBuffer;
 
@@ -45,13 +39,11 @@ void addSample(AverageBuffer* ab, int number);
 
 bool isFull(AverageBuffer* ab);
 
-void updateAverage(AverageBuffer* ab);
-
 double getUpperQuarterAverage(AverageBuffer* ab);
 double getLowerQuarterAverage(AverageBuffer* ab);
 void updateLowerQuarterSum(AverageBuffer* ab, int oldNumberToReduce);
 void updateUpperQuarterSum(AverageBuffer* ab, int newNumberToAdd);
 void updateSum(AverageBuffer* ab, int newNumberToAdd, int oldNumberToReduce);
-void* safeMalloc(size_t size);// ask about
+void* safeMalloc(size_t size);
 
 #endif
