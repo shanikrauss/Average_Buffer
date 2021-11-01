@@ -51,14 +51,14 @@ void addSample(AverageBuffer* ab, int newNumber)
 	// JUST 1 !!!!!!!!!!!!!!!!!!!!111
 	double average = getAverage(ab);
 	if (average > ab->threshold) // if avg is above threshold call callback
-
+	
 	{
 		if (ab->aboveThresholdCB != NULL)
 		{
 			ab->aboveThresholdCB(average, ab->threshold);
 		}
 	}
-	if (average > ab->threshold && ab->aboveThresholdCB != NULL) // if avg is above threshold call callback
+	if (ab->aboveThresholdCB != NULL && average > ab->threshold) // if avg is above threshold call callback
 	{
 		ab->aboveThresholdCB(average, ab->threshold);
 	}
