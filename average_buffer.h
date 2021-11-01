@@ -24,7 +24,7 @@ struct AverageBuffer {
 };
 typedef struct AverageBuffer AverageBuffer;
 
-AverageBuffer* allocAverageBuffer(int size, callbackFunc aboveThresholdCB, int threshold); // threshhold maybe double
+AverageBuffer* allocAverageBuffer(int size, callbackFunc aboveThresholdCB, int threshold); 
 
 void addSample(AverageBuffer* ab, int newNumber);
 

@@ -80,12 +80,16 @@ void updateUpperQuarterSum(AverageBuffer* ab, int newNumberToAdd)
 
 void updateLowerQuarterSum(AverageBuffer* ab, int oldestNumber)
 {
-	int nextNumOfSamples = ab->curNumOfSamples + 1;
 
-	if (!isFull(ab) && nextNumOfSamples % 4 == 0)
+	if (!isFull(ab))
 	{
-		int indexNewSampleAdd = (ab->quarterLowIdx + nextNumOfSamples / 4) - 1;
-		ab->lowerQuarterSum += ab->buffer[indexNewSampleAdd];
+		int nextNumOfSamples = ab->curNumOfSamples + 1;
+
+		if (nextNumOfSamples % 4 == 0)
+		{
+			int indexNewSampleAdd = (ab->quarterLowIdx + nextNumOfSamples / 4) - 1;
+			ab->lowerQuarterSum += ab->buffer[indexNewSampleAdd];
+		}
 	}
 	else
 	{
